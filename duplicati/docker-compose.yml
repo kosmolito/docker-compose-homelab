@@ -1,0 +1,26 @@
+version: "3"
+services:
+  duplicati:
+    container_name: duplicati
+    security_opt:
+      - no-new-privileges:true
+    image: lscr.io/linuxserver/duplicati:${DUPLICATI_VERSION}
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=022
+      - CLI_ARGS= # optional§
+    ports:
+      - 8201:8200/tcp
+    volumes:
+      - ${HOST_PATH}/duplicati:/config
+      - ${DUPLICATI_BACKUP_FOLDER}:/backups
+      - ${DUPLICATI_SOURCE_FOLDER}:/source
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true

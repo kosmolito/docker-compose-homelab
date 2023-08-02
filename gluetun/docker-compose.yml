@@ -1,0 +1,47 @@
+version: "3"
+services:
+  gluetun:
+    container_name: ${GLUETUN_CONTAINER_NAME}
+    security_opt:
+      - no-new-privileges:true
+    image: qmcgaw/gluetun:${GLUETUN_VERSION}
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 51820:51820/udp # mullvad
+      - 8888:8888/tcp # HTTP proxy
+      - 8388:8388/tcp # Shadowsocks
+      - 8388:8388/udp # Shadowsocks
+      - 8112:8112/tcp # Deluge (Torrent)
+      - 8085:8085/tcp # qbittorrent
+      - 9117:9117/tcp # Jackett (Indexer)
+      - 7878:7878/tcp # Radarr (Movies)
+      - 8989:8989/tcp # Sonarr (TV shows)
+      - 8686:8686/tcp # lidarr (Music)
+      - 49154:49154/tcp # Heimdall (dashboard)
+      - 8191:8191/tcp # flaresolverr
+      - 9696:9696/tcp # prowlarr
+    volumes:
+      - ${HOST_PATH}/gluetun:/gluetun
+    environment:
+      # See https://github.com/qdm12/gluetun/wiki
+      - VPN_SERVICE_PROVIDER=${GLUETUN_VPN_SERVICE_PROVIDER}
+      - OWNED_ONLY=${GLUETUN_OWNED_ONLY} # Servers are owned by mullvad
+      - VPN_TYPE=wireguard
+      # Wireguard:
+      - WIREGUARD_PRIVATE_KEY=${GLUETUN_WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESS=${GLUETUN_WIREGUARD_ADDRESS}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    networks:
+      - tunnel
+
+networks:
+  tunnel:
+    external:
+      name: gluetun-tunnel

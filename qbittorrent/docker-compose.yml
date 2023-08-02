@@ -1,0 +1,17 @@
+version: "3"
+services:
+  linuxserver:
+    container_name: qbittorrent
+    security_opt:
+      - no-new-privileges:true
+    image: lscr.io/linuxserver/qbittorrent:${QBITTORRENT_VERSION}
+    network_mode: "container:${GLUETUN_CONTAINER_NAME}"
+    environment:
+      - TZ=${TZ}
+      - WEBUI_PORT=8085
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=022
+    volumes:
+      - ${HOST_PATH}/qbittorrent:/config
+      - ${QBITTORRENT_DOWNLOAD_FOLDER}:/downloads

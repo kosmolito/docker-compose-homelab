@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  traefik:
+    container_name: traefik
+    security_opt:
+      - no-new-privileges:true
+    image: traefik:${TRAEFIK_VERSION}
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      # Logging configuration
+      - "--log.level=DEBUG"
+      - "--log.format=json"
+      - "--global.checkNewVersion=true"
+      - "--global.sendAnonymousUsage=false"
+
+      # providers
+      - "--providers.providersThrottleDuration=2s"
+      - "--providers.docker.watch=true"
+      - "--providers.docker.network=${FRONTEND_NETWORK}"
+      - "--providers.docker.defaultRule=Host(`{{ lower (trimPrefix `/` .Name )}}.${DOMAIN}`)"
+      - "--providers.docker.exposedByDefault=false"
+      - "--providers.file.directory=/etc/traefik"
+      - "--providers.file.watch=true"
+
+      - "--serversTransport.insecureSkipVerify=true"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      # Global HTTP -> HTTPS
+      - "--entryPoints.http.http.redirections.entryPoint.to=websecure"
+      - "--entryPoints.http.http.redirections.entryPoint.scheme=https"
+      - "--entryPoints.https.http.tls.domains[0].main=${DOMAIN}"
+      - "--entryPoints.https.http.tls.domains[0].sans=*.${DOMAIN}"
+      # certs
+      - "--entryPoints.https.http.tls.certResolver=letsencrypt"
+      - "--certificatesResolvers.letsencrypt.acme.email=${EMAIL}"
+      - "--certificatesResolvers.letsencrypt.acme.storage=/etc/traefik/acme.json"
+      - "--certificatesResolvers.letsencrypt.acme.dnsChallenge.provider=${DNS_PROVIDER}}"
+      - "--certificatesResolvers.letsencrypt.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53"
+    environment:
+      - TZ=${TZ}
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+    ports:
+      - 80:80
+      - 443:443
+      - 8183:8080 # Dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${HOST_PATH}/traefik:/etc/traefik
+    # labels:
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
+      # - "traefik.http.routers.traefik.entrypoints=websecure"
+      # - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true

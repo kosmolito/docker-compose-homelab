@@ -1,0 +1,21 @@
+version: "3"
+services:
+  adminer:
+    container_name: adminer
+    image: adminer:${ADMINER_VERSION}
+    environment:
+      - TZ=${TZ}
+      - ADMINER_DESIGN=flat
+    ports:
+      - 8585:8080/tcp
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true
+  backend:
+    name: ${BACKEND_NETWORK}
+    external: true

@@ -1,0 +1,61 @@
+# http:
+
+#   ## EXTERNAL ROUTING - Only use if you want to proxy something manually ##
+#   routers:
+#     # unifi routing - Remove if not used
+#     unifi-controller:
+#       entryPoints:
+#         - https
+#       rule: 'Host(`unifi.domain.com`)'
+#       service: unifi-controller
+#   ## SERVICES ##
+#   services:
+#     # unifi service - Remove if not used
+#     unifi-controller:
+#       loadBalancer:
+#         servers:
+#           - url: https://192.168.1.20:8443/
+
+  # ## MIDDLEWARES ##
+  # middlewares:
+  #   # Only Allow Local networks
+  #   local-ipwhitelist:
+  #     ipWhiteList:
+  #       sourceRange:
+  #         - 127.0.0.1/32 # localhost
+  #         - 192.168.1.0/24 # LAN Subnet
+    #         - 192.168.2.13/32
+
+#     # Security headers
+#     securityHeaders:
+#       headers:
+#         customResponseHeaders:
+#           X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex"
+#           X-Forwarded-Proto: "https"
+#           server: ""
+#         customRequestHeaders:
+#           X-Forwarded-Proto: "https"
+#         sslProxyHeaders:
+#           X-Forwarded-Proto: "https"
+#         referrerPolicy: "same-origin"
+#         hostsProxyHeaders:
+#           - "X-Forwarded-Host"
+#         contentTypeNosniff: true
+#         browserXssFilter: true
+#         forceSTSHeader: true
+#         stsIncludeSubdomains: true
+#         stsSeconds: 63072000
+#         stsPreload: true
+
+# # Only use secure ciphers - https://ssl-config.mozilla.org/#server=traefik&version=2.6.0&config=intermediate&guideline=5.6
+# tls:
+#   options:
+#     default:
+#       minVersion: VersionTLS12
+#       cipherSuites:
+#         - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+#         - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+#         - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+#         - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+#         - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
+#         - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305

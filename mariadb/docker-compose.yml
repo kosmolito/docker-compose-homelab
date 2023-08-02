@@ -1,0 +1,28 @@
+version: "3"
+services:
+  mariadb:
+    security_opt:
+      - no-new-privileges:true
+    container_name: mariadb
+    image: lscr.io/linuxserver/mariadb:${MARIADB_VERSION}
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=022
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      # - 'REMOTE_SQL=http://URL1/your.sql,https://URL2/your.sql'
+    # ports:
+      # - 3306:3306/tcp
+    volumes:
+      - ${HOST_PATH}/mariadb:/config
+    networks:
+      - frontend
+
+networks:
+  backend:
+    name: ${BACKEND_NETWORK}
+    external: true

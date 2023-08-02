@@ -1,0 +1,39 @@
+version: "3"
+services:
+  unifi:
+    container_name: unifi
+    security_opt:
+      - no-new-privileges:true
+    image: lscr.io/linuxserver/unifi-controller:${UNIFI_VERSION}
+    environment:
+      - TZ=${TZ}
+      - MEM_LIMIT=1024
+      - MEM_STARTUP=1024
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=022
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.unifi.tls=true
+      - traefik.http.routers.unifi.rule=Host(`unifi.${DOMAIN}`)
+      - traefik.http.services.unifi.loadbalancer.server.port=8443
+      - traefik.http.routers.unifi.entrypoints=websecure
+    ports:
+      - '8443:8443/tcp'
+      - '3478:3478/udp'
+      - '10001:10001/udp'
+      - '8080:8080/tcp'
+      - '1900:1900/udp'
+      - '8843:8843/tcp'
+      - '8880:8880/tcp'
+      - '6789:6789/tcp'
+      - '5514:5514/udp'
+    volumes:
+      - ${HOST_PATH}/unifi:/config
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true

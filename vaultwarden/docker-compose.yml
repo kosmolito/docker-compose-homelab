@@ -1,0 +1,29 @@
+version: "3"
+services:
+  vaultwarden:
+    security_opt:
+      - no-new-privileges:true
+    container_name: vaultwarden
+    image: vaultwarden/server:${VAULTWARDEN_VERSION}
+    environment:
+      - TZ=${TZ}
+      - SIGNUPS_ALLOWED=${VAULTWARDEN_SIGNUPS_ALLOWED}
+      - INVITATIONS_ALLOWED=${VAULTWARDEN_INVITATIONS_ALLOWED}
+      - WEBSOCKET_ENABLED=${VAULTWARDEN_WEBSOCKET_ENABLED}
+      - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.vaultwarden.rule=Host(`bw.${DOMAIN_NAME}`) && !PathPrefix(`/admin`) # Don't expose admin panel
+      - traefik.http.routers.vaultwarden.tls=true # Enable https
+      - traefik.http.routers.vaultwarden.entrypoints=websecure # Use https
+    ports:
+      - 4743:80/tcp
+    volumes:
+      - ${HOST_PATH}/vaultwarden:/data
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true

@@ -1,0 +1,23 @@
+version: "3"
+services:
+  portainer-ce:
+    container_name: Portainer-CE
+    security_opt:
+      - no-new-privileges:true
+    image: portainer/portainer-ce:${PORTAINER_VERSION}
+    environment:
+        - TZ=${TZ}
+    ports:
+      - 9996:9000/tcp
+      - 8000:8000/tcp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOST_PATH}/portainer-ce:/data
+    networks:
+      - frontend
+#      - backend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true

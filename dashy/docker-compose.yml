@@ -1,0 +1,23 @@
+version: "3"
+services:
+  dashy:
+    container_name: dashy
+    security_opt:
+      - no-new-privileges:true
+    image: lissy93/dashy:${DASHY_VERSION}
+    environment:
+      - TZ=${TZ}
+      - UID=${PUID}
+      - GID=${PGID}
+    ports:
+      - 4000:80/tcp
+    volumes:
+      - ${HOST_PATH}/dashy/conf.yml:/app/public/conf.yml
+      - ${HOST_PATH}/dashy/icons:/app/public/item-icons
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true

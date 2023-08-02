@@ -1,0 +1,27 @@
+version: "3"
+services:
+  flaresolverr:
+    container_name: flaresolverr
+    security_opt:
+      - no-new-privileges:true
+    image: flaresolverr/flaresolverr:${FLARESOLVERR_VERSION}
+    network_mode: "container:${GLUETUN_CONTAINER_NAME}"
+    environment:
+      - TZ=${TZ}
+      - LOG_LEVEL=info
+  
+  prowlarr:
+    container_name: prowlarr
+    security_opt:
+      - no-new-privileges:true
+    image: cr.hotio.dev/hotio/prowlarr:${PROWLARR_VERSION}
+    network_mode: "container:${GLUETUN_CONTAINER_NAME}"
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=002
+    volumes:
+      - ${HOST_PATH}/prowlarr:/config
+    depends_on:
+      - flaresolverr

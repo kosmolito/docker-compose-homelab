@@ -1,0 +1,43 @@
+version: "3"
+services:
+  changedetection:
+    container_name: changedetection
+    security_opt:
+      - no-new-privileges:true
+    image: ghcr.io/dgtlmoon/changedetection.io:${CHANGEDETECTION_VERSION}
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - PLAYWRIGHT_DRIVER_URL=ws://playwright-chrome:3000/?stealth=1&--disable-web-security=true
+    # hostname: changedetection
+    volumes:
+      - ${HOST_PATH}/changedetection/changedetection-data:/datastore
+    ports:
+      - 5000:5000
+    restart: unless-stopped
+    networks:
+      - frontend
+
+  playwright-chrome:
+    hostname: playwright-chrome
+    image: browserless/chrome:{PLAYWRIGHT_CHROME_VERSION}
+    container_name: playwright-chrome
+    environment:
+      - TZ=${TZ}
+      - SCREEN_WIDTH=1920
+      - SCREEN_HEIGHT=1080
+      - SCREEN_DEPTH=16
+      - ENABLE_DEBUGGER=false
+      - PREBOOT_CHROME=true
+      - CONNECTION_TIMEOUT=300000
+      - MAX_CONCURRENT_SESSIONS=10
+      - CHROME_REFRESH_TIME=600000
+      - DEFAULT_BLOCK_ADS=true
+      - DEFAULT_STEALTH=true
+    restart: unless-stopped
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true

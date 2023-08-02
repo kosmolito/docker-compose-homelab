@@ -1,0 +1,17 @@
+version: "2.1"
+services:
+  radarr:
+    container_name: radarr
+    security_opt:
+      - no-new-privileges:true
+    image: lscr.io/linuxserver/radarr:${RADARR_VERSION}
+    network_mode: "container:${GLUETUN_CONTAINER_NAME}"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${HOST_PATH}/radarr:/config
+      - ${RADARR_MOVIES_FOLDER}:/movies #optional
+      - ${RADARR_DOWNLOAD_FOLDER}:/downloads #optional
+    restart: unless-stopped

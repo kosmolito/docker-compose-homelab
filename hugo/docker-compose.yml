@@ -1,0 +1,23 @@
+version: "3"
+services:
+  hugo:
+    container_name: hugo
+    security_opt:
+      - no-new-privileges:true
+    image: klakegg/hugo:{HUGO_VERSION}
+    restart: unless-stopped
+    command: server #--disableFastRender
+    ports:
+      - 1313:1313
+    volumes:
+      - ${HOST_PATH}/hugo/www/:/src
+#    environment:
+#      - HUGO_REFRESH_TIME=3600
+#      - HUGO_BASEURL=domain.name
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true

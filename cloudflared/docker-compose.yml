@@ -1,0 +1,19 @@
+version: "3"
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:${CLOUDFLARED_VERSION}
+    container_name: cloudflared
+    restart: unless-stopped
+    command: "tunnel --config /home/nonroot/.cloudflared/config.yml run"
+    environment:
+      - TZ=${TZ}
+      # - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    volumes:
+      - ${HOST_PATH}/cloudflared:/home/nonroot/.cloudflared/:rw
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true

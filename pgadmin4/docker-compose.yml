@@ -1,0 +1,29 @@
+version: "3"
+services:
+  pgadmin4:
+    container_name: pgadmin4
+    security_opt:
+      - no-new-privileges:true
+    image: dpage/pgadmin4:${PGADMIN_VERSION}
+    environment:
+      - TZ=${TZ}
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - PGADMIN_LISTEN_ADDRESS=${PGADMIN_LISTEN_ADDRESS}
+    ports:
+      - 8792:80/tcp
+    volumes:
+      - ${HOST_PATH}/pgadmin4:/var/lib/pgadmin
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+    name: ${FRONTEND_NETWORK}
+    external: true
+  backend:
+    name: ${BACKEND_NETWORK}
+    external: true
