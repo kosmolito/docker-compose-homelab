@@ -6,7 +6,7 @@ services:
     environment:
       - TZ=${TZ}
     ports:
-        - 8899:80
+        - 8898:80
     volumes:
         - ${HOST_PATH}/simple-webapp/html:/usr/share/nginx/html
     networks:
