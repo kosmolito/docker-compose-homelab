@@ -6,11 +6,12 @@ This project is a docker-compose project for my homelab. It is a collection of s
 I have tried to make the project as dynamic as possible, so that it can be used on different platforms and with different configurations. This is achieved by using environment variables and a `.env` file.
 
 ### Features
+
 - [x] Dynamic configuration using environment variables
 - [X] No hardcoded secrets in the repository
 
-
 ### Services
+
 - [Adminer](https://www.adminer.org/) - Database management UI
 - [ChangeDetection](https://www.changedetection.com/) - Website change detection
 - [Duplicati](https://www.duplicati.com/) - Backup
@@ -34,12 +35,16 @@ I have tried to make the project as dynamic as possible, so that it can be used 
 - [Vaultwarden](https://github.com/dani-garcia/vaultwarden) - Bitwarden compatible password manager
 
 ## Setup
+
 - ### 1. Clone the repository and cd into it
+
 ```bash
 git clone https://github.com/kosmolito/docker-compose-homelab.git
 cd docker-compose-homelab
 ```
+
 - ### 2. If Docker is not already installed, install it
+
 ```bash
 chmod +x install-docker.sh
 ./install-docker.sh
@@ -56,7 +61,3 @@ chmod +x install-docker.sh
 # The port 8899 is exposed in the docker-compose.yml file
 docker compose --env-file .env -f nginx-webserver/docker-compose.yml up -d
 ```
-
-
-
-
