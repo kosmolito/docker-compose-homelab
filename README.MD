@@ -1,16 +1,17 @@
 # Docker Compose project for homelab
 
-### Description
+## Description
+
 This project is a docker-compose project for my homelab. It is a collection of services that I use on a daily basis. It is not meant to be a one-size-fits-all solution, but rather a starting point for others to build upon.
 
 I have tried to make the project as dynamic as possible, so that it can be used on different platforms and with different configurations. This is achieved by using environment variables and a `.env` file.
 
-### Features
+## Features
 
 - [x] Dynamic configuration using environment variables
 - [X] No hardcoded secrets in the repository
 
-### Services
+## Services
 
 - [Adminer](https://www.adminer.org/) - Database management UI
 - [ChangeDetection](https://www.changedetection.com/) - Website change detection
@@ -34,27 +35,29 @@ I have tried to make the project as dynamic as possible, so that it can be used 
 - [Unifi](https://www.ui.com/software/) - Network management
 - [Vaultwarden](https://github.com/dani-garcia/vaultwarden) - Bitwarden compatible password manager
 
-## Setup
+### Setup
 
-- ### 1. Clone the repository and cd into it
+- #### Clone the repository and cd into it
 
-```bash
-git clone https://github.com/kosmolito/docker-compose-homelab.git
-cd docker-compose-homelab
-```
+    ```bash
+    git clone https://github.com/kosmolito/docker-compose-homelab.git
+    cd docker-compose-homelab
+    ```
 
-- ### 2. If Docker is not already installed, install it
+- #### If Docker is not installed
 
-```bash
-chmod +x install-docker.sh
-./install-docker.sh
-```
+    The `install-docker.sh` script (*provided in this repo*) will install Docker and Docker Compose on Ubuntu 22.04.
 
-3. ### Create a `.env` file in the root of the repository. See `sample-config.env.example` for an example.
+    ```bash
+    chmod +x install-docker.sh
+    ./install-docker.sh
+    ```
 
-## Usage
+- #### 3. Create a `.env` file in the root of the repository. See `sample-config.env.example` for an example
 
-1. ### Run `docker-compose` to start the services
+### Usage
+
+#### Run `docker-compose` to start the services
 
 ```bash
 # Simple nginx webserver for testing purposes
