@@ -1,22 +1,11 @@
 tunnel: UUID
 credentials-file: /home/nonroot/.cloudflared/UUID.json
 
-# # NOTE: You should only have one ingress tag, so if you uncomment one block comment the others
-
-# #forward all traffic to Reverse Proxy w/ SSL
+### NOTE: You should only have one ingress tag, so if you uncomment one block comment the others ###
+# Forward all traffic to Reverse Proxy w/ SSL
 ingress:
   - service: https://REVERSEPROXYIP:PORT
     originRequest:
       originServerName: reverse.yourdomain.com
-# create the required catch all rule for if something doesn’t match the info we entered above. We will tell it to serve a 404 page.
+  # create the required catch all rule for if something doesn’t match the info we entered above. We will tell it to serve a 404 page.
   - service: http_status:404
-
-# forward all traffic to Reverse Proxy w/ SSL and no TLS Verify
-# ingress:
-#  - service: https://traefik:44301
-#    originRequest:
-#      noTLSVerify: true
-
-# # forward all traffic to reverse proxy over http
-# #ingress:
-# #  - service: http://REVERSEPROXYIP:PORT
